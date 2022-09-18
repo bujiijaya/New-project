@@ -1,0 +1,59 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+
+        var tr;
+        $.getJSON("/Home/GetEmpDetails",
+       function (json) {
+
+           $.each(json, function (i, EmpData) {
+               var Empid = EmpData.Id;
+               tr = $('<tr/>');
+               tr.append("<td class='Name'>" + EmpData.Name + "</td>");
+               tr.append("<td class='City'>" + EmpData.City + "</td>");
+               tr.append("<td class='Address'>" + EmpData.Address + "</td>");
+               tr.append("<td>" + "<a Onclick='return false;' class='DeleteCss' href=/Home/Delete/" + Empid + ">Delete</a>" + " | " + "<a class='EditCss' href=/Home/Edit/" + Empid + ">Edit</a>" + "</td>");
+               $('#TblEmpDet').append(tr);
+           });
+       });
+        $('#TblEmpDet').on('click', 'td a.DeleteCss', function () {
+            var DeleteUrl = $(this).attr("href");
+            if (confirm("Are you sure wants to delete ?.")) {
+                $.ajax({
+                    url: DeleteUrl,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json",
+                    error: function (err) {
+                        alert('Unable to delete record.');
+                    },
+                    success: function (response) {
+
+                        $('#DivEmpList').load("/Home/EmployeeDetails");
+
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<table id="TblEmpDet" class="table  table-bordered table-hover">
+    <thead>
+        <tr>
+
+            <th>
+                Name
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Address
+            </th>
+            <th></th>
+        </tr> 
+
+    </thead>
+   <tbody>
+   </tbody>
+</table>

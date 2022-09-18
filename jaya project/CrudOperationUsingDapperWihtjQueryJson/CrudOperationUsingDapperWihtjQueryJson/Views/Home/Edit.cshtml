@@ -1,0 +1,74 @@
+﻿@model CrudOperationUsingDapperWihtjQueryJson.Models.EmpModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery-1.10.2.intellisense.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#btnUpdate").click(function () {
+           
+            var EmpModel = {
+                Id: $("#hdnId").val(),
+                Name: $("#Name").val(),
+                City: $("#City").val(),
+                Address: $("#Address").val()
+            };
+           
+          $.ajax({
+             type: "POST",
+             URL: "/Home/Edit",
+             dataType: "json",
+             contentType: "application/json",
+             data: JSON.stringify({ EmpUpdateDet:EmpModel}),
+             error: function (response) {
+                 alert(response.responseText);
+             },
+             success: function (response) {
+                 alert(response);
+                 window.location.href = "/Home/AddEmployee";
+                 
+             }
+          });
+        });
+    });
+</script>
+
+    
+    <div class="form-horizontal">
+        
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id,new {@id="hdnId" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" id="btnUpdate" value="Update" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
